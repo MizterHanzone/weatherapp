@@ -26,25 +26,23 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Future<void> getCurrentWeather() async {
-    String cityName = "London";
+    String cityName = "Phnom Penh";
 
     try {
-      final res = await http.get(
-        Uri.parse(
-          'https://api.openweathermap.org/data/2.5/forecast?q=$cityName&APPID=$openWeatherAPIKey&units=metric',
-        ),
+      final url = Uri.parse(
+        'https://api.openweathermap.org/data/2.5/forecast?q=$cityName&APPID=$openWeatherAPIKey&units=metric',
       );
+      final response = await http.get(url);
 
-      if (res.statusCode == 200) {
-        final data = jsonDecode(res.body);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
         setState(() {
           weatherData = data;
           isLoading = false;
         });
       } else {
-        debugPrint(
-            "Failed to load weather data. Status code: ${res.statusCode}");
-        debugPrint("Response: ${res.body}");
+        debugPrint("Failed to load weather data. Status code: ${response.statusCode}");
+        debugPrint("Response: ${response.body}");
       }
     } on SocketException {
       debugPrint("No Internet connection. Please check your network.");
